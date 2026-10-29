@@ -1,0 +1,34 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: gsd-backend
+    environment:
+      - DATABASE_URL=sqlite:////data/gsd.db
+      - SECRET_KEY=${SECRET_KEY:-dev-only-change-me}
+      - LLM_PROVIDER=${LLM_PROVIDER:-mock}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - AGENT_MAX_ITERATIONS=${AGENT_MAX_ITERATIONS:-6}
+      - CORS_ORIGINS=http://localhost:8080,http://localhost:5173
+      - ENABLE_SCHEDULER=true
+    volumes:
+      - gsd-data:/data
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: gsd-frontend
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
+volumes:
+  gsd-data:

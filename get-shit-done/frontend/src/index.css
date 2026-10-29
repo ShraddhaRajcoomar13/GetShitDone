@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-paper:    253 251 246;
+  --color-ink:      31 27 20;
+  --color-accent:   199 112 60;
+  --color-accent-2: 60 107 107;
+  --bg-image:       none;
+  --bg-opacity:     0;
+}
+
+html, body, #root { height: 100%; }
+
+body {
+  background-color: rgb(var(--color-paper));
+  color: rgb(var(--color-ink));
+  @apply font-sans antialiased;
+}
+
+/* Background image layer — behind #root, above body's paper color */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: var(--bg-opacity);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* App content sits above the image */
+#root { position: relative; z-index: 1; }
+
+.card { @apply bg-white dark:bg-neutral-800 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-700 p-4; }
+.btn  { @apply px-3 py-2 rounded-lg font-medium transition; }
+.btn-primary { @apply btn bg-accent text-white hover:opacity-90; }
+.btn-ghost   { @apply btn hover:bg-neutral-100 dark:hover:bg-neutral-700; }
+.input { @apply w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900; }
+h1, h2, h3 { @apply font-serif; }
